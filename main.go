@@ -77,6 +77,7 @@ func getWeather(city, owApiHost, owApiKey string) string {
 	q := url.Values{}
 	q.Add("appid", owApiKey)
 	q.Add("q", city)
+	q.Add("units", "imperial")
 	req.URL.RawQuery = q.Encode()
 	requestUri := req.URL.String()
 
@@ -110,6 +111,9 @@ func main() {
 	result := getWeather(city, owApiHost, owApiKey)
 	json.Unmarshal([]byte(result), &results)
 	
-	fmt.Println(results)
+	fmt.Printf("The city is: %s \n", results.Name)
+	fmt.Printf("The temperature is: %g \n", results.Main.Temp)
+	fmt.Printf("The humidity is: %d \n", results.Main.Humidity)
+	fmt.Printf("The forecast is: %s", results.Weather[0].Description)
 }
 
