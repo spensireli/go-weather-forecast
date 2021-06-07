@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"io/ioutil"
 	"encoding/json"
+	"flag"
 )
 
 type Results struct {
@@ -99,16 +100,16 @@ func getWeather(city, owApiHost, owApiKey string) string {
 
 
 func main() {
+	var city string
 	owApiHost := "http://api.openweathermap.org/data/2.5/weather"
 	owApiKey := os.Getenv("OW_API_KEY")
-	city := "Pittsburgh"
-
-
+	wordPtr := flag.String("city", "foo", "a string")
+	flag.Parse()
+	city = *wordPtr
 	var results Results
 	result := getWeather(city, owApiHost, owApiKey)
 	json.Unmarshal([]byte(result), &results)
+	
 	fmt.Println(results)
-
-
 }
 
