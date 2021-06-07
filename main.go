@@ -7,7 +7,63 @@ import (
 	"net/http"
 	"net/url"
 	"io/ioutil"
+	"encoding/json"
 )
+
+type Results struct {
+	Coord Coord
+	Weather []Weather
+	Base string
+	Main Main
+	Visibility int
+	Wind Wind
+	Clouds Clouds
+	Dt string
+	Sys Sys
+	Timezone int
+	Id int
+	Name string
+	Cod int
+}
+
+type Coord struct {
+	Lon float32
+	Lat float32
+}
+
+type Weather struct {
+	Id int
+	Main string
+	Description string
+	Icon string
+}
+
+type Main struct {
+	Temp float32
+	FeelsLike float32 
+	TempMin float32 
+	TempMax float32 
+	Pressure int
+	Humidity int
+}
+
+type Wind struct {
+	Speed float32 
+	Deg int 
+	Gust float32 
+}
+
+type Clouds struct {
+	All int
+}
+
+type Sys struct {
+	Type int 
+	Id int
+	Country string 
+	Sunrise int
+	Sunset int
+}
 
 func getWeather(city, owApiHost, owApiKey string) string {
 	req, err := http.NewRequest("GET", owApiHost, nil)
@@ -46,9 +102,12 @@ func main() {
 	owApiKey := os.Getenv("OW_API_KEY")
 	city := "Pittsburgh"
 
-
+	
+	var results Results
 	result := getWeather(city, owApiHost, owApiKey)
-	fmt.Println(result)
+	json.Unmarshal([]byte(result), &results)
+	fmt.Println(results)
+
 
 }
 
