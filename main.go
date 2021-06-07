@@ -66,10 +66,11 @@ type Sys struct {
 }
 
 func getWeather(city, owApiHost, owApiKey string) string {
+
+	bodyString := ""
 	req, err := http.NewRequest("GET", owApiHost, nil)
 	if err != nil {
 		log.Print(err)
-		os.Exit(1)
 	}
 
 	q := url.Values{}
@@ -89,10 +90,10 @@ func getWeather(city, owApiHost, owApiKey string) string {
 		if err != nil {
 			log.Fatal(err)
 		}
-		bodyString := string(bodyBytes)
+		bodyString = string(bodyBytes)
 		return bodyString
 	}
-	return ""
+	return bodyString
 
 }
 
@@ -102,7 +103,7 @@ func main() {
 	owApiKey := os.Getenv("OW_API_KEY")
 	city := "Pittsburgh"
 
-	
+
 	var results Results
 	result := getWeather(city, owApiHost, owApiKey)
 	json.Unmarshal([]byte(result), &results)
